@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "heatmap-compose"
 include(":heatmap")
+include(":sample")
