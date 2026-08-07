@@ -1,6 +1,7 @@
 # heatmap-compose 🟩
 
 [![CI](https://github.com/Meko123456/heatmap-compose/actions/workflows/ci.yml/badge.svg)](https://github.com/Meko123456/heatmap-compose/actions/workflows/ci.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.meko123456/heatmap)](https://central.sonatype.com/artifact/io.github.meko123456/heatmap)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 GitHub-style contribution heatmap for Jetpack Compose.
@@ -43,11 +44,9 @@ val bitmap = HeatmapBitmap.render(counts = countsByDay, endDay = today, weeks = 
 
 ## Installation
 
-Maven Central publication is in progress ([#7](../../issues/7)). Until then,
-include the `:heatmap` module directly or copy the three files — MIT licensed.
+Available on [Maven Central](https://central.sonatype.com/artifact/io.github.meko123456/heatmap):
 
 ```kotlin
-// coming soon
 implementation("io.github.meko123456:heatmap:0.1.0")
 ```
 
