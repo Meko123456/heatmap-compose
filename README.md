@@ -1,36 +1,63 @@
 # heatmap-compose 🟩
 
+[![CI](https://github.com/Meko123456/heatmap-compose/actions/workflows/ci.yml/badge.svg)](https://github.com/Meko123456/heatmap-compose/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 GitHub-style contribution heatmap for Jetpack Compose.
 
-A single dependency that gives you the familiar green-squares calendar:
+<p align="center">
+  <img src="docs/sample.png" width="320" alt="Sample app: default greens, 26 weeks, custom orange palette, sparse data" />
+</p>
 
-- **`ContributionHeatmap`** — a Compose Canvas composable: one column per week,
-  Sunday-first rows, newest week on the right, exactly like github.com
-- **`HeatmapBitmap`** — the same grid rendered to an `android.graphics.Bitmap`,
-  for surfaces that can't host Compose: Glance widgets, notifications, shares
-- **`HeatmapLevel`** — the pure intensity-bucketing math (0–4 levels, busiest
-  day always darkest), fully unit-tested
+## What you get
 
-Extracted from [HabitStreaks](https://github.com/Meko123456/HabitStreaks),
-where it renders both in-app heatmaps and two home-screen widgets.
+| API | For |
+|---|---|
+| `ContributionHeatmap` | Compose UI — a single-Canvas composable |
+| `HeatmapBitmap` | Non-Compose surfaces — Glance widgets, notifications, share images |
+| `HeatmapLevel` | The pure intensity math (0–4 levels), if you render yourself |
+
+Layout mirrors github.com exactly: one column per week, Sunday-first rows,
+newest week on the right. The busiest day is always the darkest green.
 
 ## Usage
 
 ```kotlin
 ContributionHeatmap(
-    counts = mapOf(LocalDate.now().toEpochDay() to 5),  // epochDay -> count
+    counts = countsByDay,                     // Map<Long, Int>: epochDay -> count
     endDay = LocalDate.now().toEpochDay(),
-    weeks = 20,
+    weeks = 20,                               // columns
+    levelColors = GithubGreens,               // any 4 colors
+    emptyColor = DefaultEmptyColor,
 )
 ```
 
-Colors, week count, and empty-cell color are parameters; defaults match
-GitHub's dark-theme palette.
+For a widget or notification:
 
-## Status
+```kotlin
+val bitmap = HeatmapBitmap.render(counts = countsByDay, endDay = today, weeks = 26)
+```
 
-🚧 Extraction in progress — see [issues](../../issues) for the roadmap to
-Maven Central.
+- **Zero dependencies** beyond `compose-ui` + `compose-foundation` — no material3
+- `minSdk 26`
+
+## Installation
+
+Maven Central publication is in progress ([#7](../../issues/7)). Until then,
+include the `:heatmap` module directly or copy the three files — MIT licensed.
+
+```kotlin
+// coming soon
+implementation("io.github.meko123456:heatmap:0.1.0")
+```
+
+## Sample
+
+The [`:sample`](sample/) module demos default palette, custom colors, week
+counts, and sparse data — `./gradlew :sample:installDebug`.
+
+Extracted from [HabitStreaks](https://github.com/Meko123456/HabitStreaks),
+where it renders in-app heatmaps and two home-screen widgets.
 
 ## License
 
