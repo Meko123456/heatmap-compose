@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
-import java.time.DayOfWeek
 import java.time.LocalDate
 
 /**
@@ -23,6 +22,8 @@ public object HeatmapBitmap {
      * @param gapPx gap between cells in pixels
      * @param levelColors ARGB colors for levels 1..4, defaults to GitHub greens
      * @param emptyColor ARGB color for zero-contribution days
+     * @param maxCount the count that maps to the darkest level; defaults to the
+     *   busiest visible day (relative scale). Pass a fixed value for an absolute scale
      */
     public fun render(
         counts: Map<Long, Int>,
@@ -37,6 +38,7 @@ public object HeatmapBitmap {
             0xFF39D353.toInt(),
         ),
         emptyColor: Int = 0x40808080,
+        maxCount: Int? = null,
     ): Bitmap {
         require(weeks > 0 && cellPx > 0) { "weeks and cellPx must be positive" }
         require(levelColors.size == HeatmapLevel.MAX_LEVEL) {
@@ -51,19 +53,15 @@ public object HeatmapBitmap {
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         val corner = cellPx * 0.18f
-        val maxCount = counts.values.maxOrNull() ?: 0
-
-        val endRow = LocalDate.ofEpochDay(endDay).dayOfWeek.let { dow ->
-            if (dow == DayOfWeek.SUNDAY) 0 else dow.value
-        }
-        val firstDay = endDay - endRow - (weeks - 1) * 7L
+        val scaleMax = maxCount ?: (counts.values.maxOrNull() ?: 0)
+        val firstDay = HeatmapLayout.firstDay(endDay, weeks)
 
         val rect = RectF()
         for (col in 0 until weeks) {
-            for (row in 0 until 7) {
+            for (row in 0 until HeatmapLayout.ROWS) {
                 val day = firstDay + col * 7L + row
                 if (day > endDay) continue
-                val level = HeatmapLevel.levelFor(counts[day] ?: 0, maxCount)
+                val level = HeatmapLevel.levelFor(counts[day] ?: 0, scaleMax)
                 paint.color = if (level == 0) emptyColor else levelColors[level - 1]
                 val left = (col * step).toFloat()
                 val top = (row * step).toFloat()
