@@ -7,7 +7,7 @@ plugins {
 mavenPublishing {
     publishToMavenCentral(automaticRelease = true)
     signAllPublications()
-    coordinates("io.github.meko123456", "heatmap", "0.1.0")
+    coordinates("io.github.meko123456", "heatmap", "0.2.0")
 
     pom {
         name.set("heatmap-compose")
