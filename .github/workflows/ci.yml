@@ -24,3 +24,9 @@ jobs:
 
       - name: Build, lint and unit tests
         run: ./gradlew :heatmap:build --stacktrace
+
+      # :sample is the module anyone evaluating this library reads and copies from, and nothing
+      # ever compiled it. A library can stay green while the only worked example of how to use it
+      # no longer builds against its own current API — which is the version people would hit first.
+      - name: Build the sample app
+        run: ./gradlew :sample:assembleDebug :sample:lintDebug --stacktrace
