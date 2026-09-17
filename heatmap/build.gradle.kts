@@ -36,6 +36,17 @@ mavenPublishing {
 
 android {
     namespace = "io.github.meko123456.heatmap"
+    // Deliberately 36 while every app in the fleet is on 37, and not an oversight.
+    //
+    // AGP writes this straight into the published AAR's metadata as minCompileSdk, so a library's
+    // compileSdk is a requirement placed on everyone who depends on it, not a private build detail.
+    // Verified rather than assumed: building this module on 37 produces minCompileSdk=37 in
+    // heatmap/build/intermediates/aar_metadata/release/. That is the exact mechanism that made
+    // Compose BOM 2026.09.00 and okhttp 5.5.0 break projects across this fleet.
+    //
+    // This library is on Maven Central and consumed today. Raising it would force every consumer
+    // forward to buy nothing, since nothing here needs an API newer than 36. It moves when
+    // something in it actually requires a newer platform, and not before.
     compileSdk = 36
 
     defaultConfig {
