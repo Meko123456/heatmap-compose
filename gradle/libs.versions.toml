@@ -1,6 +1,6 @@
 [versions]
 agp = "9.4.1"
-kotlin = "2.4.20"
+kotlin = "2.4.21"
 # Held here on purpose. BOM 2026.09.00 brings Compose 1.12, whose AARs demand compileSdk 37 of
 # everything that depends on them, and :heatmap stays on 36 so as not to demand it of its own
 # consumers (see the compileSdk note in heatmap/build.gradle.kts). Moving this means moving that.
